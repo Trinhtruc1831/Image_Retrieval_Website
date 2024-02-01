@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Page</title>
+  <style>
+    div.main {
+        margin-top: 150px; /* You can adjust the margin value as needed */
+
+    }
+
+    body {
+      background-color: #FFF6E9;
+      color: #0D9276;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      /* margin: 20px; */
+    }
+
+    /* Navigation Bar Styles */
+    nav {
+      background-color: #0D9276;
+      text-align: right;
+      padding: 10px;
+    }
+
+    nav a {
+      color: #FFF6E9;
+      text-decoration: none;
+      padding: 10px;
+      margin: 5px;
+    }
+
+    nav a:hover {
+      background-color: #FFF6E9;
+      color: #0D9276;
+    }
+
+    input, button {
+      margin: 10px;
+      padding: 8px;
+      font-size: 16px;
+      border: none;
+    }
+
+    #imageSearch, #textSearch {
+      width: 300px;
+    }
+
+    button {
+      background-color: #0D9276;
+      color: #FFF6E9;
+      cursor: pointer;
+    }
+
+    
+  </style>
+</head>
+<body>
+  
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </nav>
+    
+    <div class="main">
+        <h1>Search Page</h1>
+  
+        <label for="imageSearch">Image File:</label>
+        <input type="file" id="imageSearch" name="imageSearch"><br>
+        
+        <label for="textSearch">Text Search:</label>
+        <input type="text" id="textSearch" name="textSearch"><br>
+        
+        <button onclick="search()">Search</button>
+
+
+    </div>
+  
+  <script>
+    function search() {
+      // Add your search logic here
+      alert("Search clicked! Add your search logic.");
+    }
+  </script>
+</body>
+</html>
