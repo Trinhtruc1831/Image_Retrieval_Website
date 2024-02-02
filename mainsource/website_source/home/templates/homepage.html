@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Door Animation</title>
+  <style>
+    nav {
+      background-color: #0D9276;
+      text-align: right;
+      padding: 10px;
+    }
+
+    nav a {
+      color: #FFF6E9;
+      text-decoration: none;
+      padding: 10px;
+      margin: 5px;
+    }
+
+    nav a:hover {
+      background-color: #FFF6E9;
+      color: #0D9276;
+      border-radius: 10px;
+    }
+    .door-container {
+    margin: -600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    }
+
+    h1 {
+        font-family: Arial, sans-serif;
+        font-size: 50px;
+
+    }
+
+    body {
+      background-color: #FFF6E9;
+      color: #0D9276;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      /* margin: 20px; */
+    }
+
+    h3 {
+        text-align: center;
+    }
+
+    section {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+    
+    
+
+  </style>
+</head>
+<body>
+    <nav>
+        <a href="../">Home</a>
+        <a href="/search">Search</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <div class="main">
+        <h1>
+            <b>Welcome to ZooMemories!!!</b>
+        </h1>
+        <section>
+            <p><i>We are proud to introduce a unique system where you can store and reminisce about wonderful memories from visits to wildlife conservation areas. ZooMemories is not just a typical storage system; it's also a reliable companion in capturing and preserving memorable moments with the animal kingdom.</i></p>
+    
+            <h3>Key Features:</h3>
+            <ul>
+                <li><strong>Flexible Storage:</strong> Easily store images from each visit, allowing you to create a diverse collection of various animal species and exceptional experiences.</li>
+    
+                <li><strong>Smart Search:</strong> Effortlessly search for memories using both descriptions and similar images.</li>
+    
+                <li><strong>Security and Privacy:</strong> ZooMemories is committed to safeguarding your personal information, ensuring that your important memories are kept safe.</li>
+            </ul>
+    
+            <p>We believe that ZooMemories will make every wildlife visit special and preserve your most beautiful memories. Join us in celebrating extraordinary animal moments!</p>
+        </section>
+    </div>
+
+
+    <div class="door-container">
+        <div class="door" id="door">
+            {% load static %}
+            <div class="door-header">
+                <img id="header" src="{% static 'Header.png' %}" alt="Header">
+            </div>
+            <div class="door-footer">
+                <img id="footer" src="{% static 'Footer.png' %}" alt="Footer">
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the image element
+            var image_top = document.getElementById("header");
+            var image_bot = document.getElementById("footer");
+
+            // Attach a click event listener to the image
+            image_top.addEventListener("click", function () {
+                // Move the image out of the page in the top direction
+                moveImageOutOfPage(image_top, image_bot);
+            });
+        });
+
+        function moveImageOutOfPage(image_top, image_bot) {
+            // Set the initial position of the image
+            image_top.style.position = "absolute";
+            image_bot.style.position = "absolute";
+
+            image_top.style.top = "-300px";
+            image_bot.style.bottom = "-150px";
+
+            image_top.style.left = "0px";
+            image_bot.style.left = "0px";
+
+            image_top.style.transition = "top 2s"; // Add transition for a smooth animation
+            image_bot.style.transition = "bottom 2s"; // Add transition for a smooth animation
+
+
+            // Move the image out of the page by setting the top position to a negative value
+            image_top.style.top = "-" + image_top.offsetHeight + "px";
+            image_bot.style.bottom = "-" + image_bot.offsetHeight + "px";
+
+            console.log(image_top.style.top);
+            
+        }
+
+    
+    </script>
+</body>
+</html>

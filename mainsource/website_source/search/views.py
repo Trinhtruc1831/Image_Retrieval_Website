@@ -1,20 +1,41 @@
-from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-from .models import zoo_data_embedding
+from .retrival import get_top_N_images
+from django.core.files.storage import FileSystemStorage
+from PIL import Image
+from django.conf import settings
+import os
 
-def index(request):
-    # csv_file = request.FILES['csv_file'].read().decode('utf-8').splitlines()
-    # csv_reader = csv.DictReader(csv_file)
-
-    # for row in csv_reader:
-    #     Book.objects.create(
-    #         title=row['title'],
-    #         author=row['author'],
-    #         publication_year=row['publication_year'],
-    #         isbn=row['isbn']
-    #     )
-
+def index(request):    
 
     template = loader.get_template('searchview.html')
-    return HttpResponse(template.render())
+    rs_list = []
+    
+    if (request.method == "POST"):
+        Is_query_text = True if request.POST['textSearch'] != "" else False
+        Is_query_img = True if 'imageSearch' in request.FILES else False
+
+
+       
+        if(Is_query_text and not(Is_query_img)):
+            query_text = request.POST['textSearch']
+            rs = get_top_N_images(query_text, top_K=10, search_criterion="text")
+            rs_list = rs.image_name.values
+
+        if(Is_query_img and not(Is_query_text)):
+            query_img = request.FILES['imageSearch']
+            fss = FileSystemStorage()
+            file = fss.save(query_img.name, query_img)
+
+            
+            query_image = Image.open(f"{settings.BASE_DIR}/{fss.url(file)}")
+            os.remove(f"{settings.BASE_DIR}/{fss.url(file)}")
+
+            rs = get_top_N_images(query_image, top_K=10, search_criterion="img")
+            rs_list = rs.image_name.values
+
+    context = {
+        'animalresults': rs_list,
+    }
+    
+    return HttpResponse(template.render(context, request))
