@@ -1,4 +1,6 @@
 # import_database.py
+# import django
+# django.setup()
 import csv
 from datetime import datetime
 from search.models import Zoo # Replace 'myapp' with your actual app name
@@ -14,8 +16,5 @@ def import_database(file_path):
                 cos_sim =row['cos_sim'],
             )
 if __name__ == '__main__':
-    csv_file_path = '../resource/animal_text_img_dataset_extracted.csv' # Replace with your actual file path
+    csv_file_path = './search/static/resource/animal_text_img_dataset_extracted.csv' # Replace with your actual file path
     import_database(csv_file_path)
-
-
-  
