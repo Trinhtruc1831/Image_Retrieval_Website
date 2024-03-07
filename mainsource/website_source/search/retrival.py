@@ -12,6 +12,8 @@ import pandas as pd
 # from collections import OrderedDict
 from transformers import CLIPProcessor, CLIPTokenizer, CLIPModel
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import euclidean_distances
+from sklearn.metrics.pairwise import haversine_distances
 
 from .models import Zoo
 
@@ -66,7 +68,7 @@ def parse_embedding_array(str_embedding):
     return array
     
 
-def get_top_N_images(query, top_K=10, search_criterion="text"):
+def get_top_N_images(query, top_K=100, search_criterion="text"):
 
     data = pd.DataFrame(
         list(
@@ -88,16 +90,25 @@ def get_top_N_images(query, top_K=10, search_criterion="text"):
     # Relevant columns
     revevant_cols = ["image_name","comment", "cos_sim"]
 
+    type_of_similarity = "dot_product" #"dot_product" "euclidean_distances" "cosine_similarity"
+
+    if type_of_similarity == "cosine_similarity":
+      print("🌽")
+      data["similarity"] = data["img_embeddings"].apply(lambda x: cosine_similarity(query_vect, parse_embedding_array(x)))
+      data["similarity"] = data["similarity"].apply(lambda x: x[0][0])
+
+      most_similar_articles = data.sort_values(by='similarity', ascending=False).drop_duplicates(subset='image_name')[1:top_K+1]
     
+    if type_of_similarity == "euclidean_distances":
+      print("🍒")
+      data["similarity"] = data["img_embeddings"].apply(lambda x: euclidean_distances(query_vect, parse_embedding_array(x)))
+      data["similarity"] = data["similarity"].apply(lambda x: x[0][0])
 
-    # Run similarity Search
-    data["cos_sim"] = data["img_embeddings"].apply(lambda x: cosine_similarity(query_vect, parse_embedding_array(x)))
-    data["cos_sim"] = data["cos_sim"].apply(lambda x: x[0][0])
+      most_similar_articles = data.sort_values(by='similarity', ascending=True).drop_duplicates(subset='image_name')[1:top_K+1]
+    
+    if type_of_similarity == "dot_product":
+      data["similarity"] = data["img_embeddings"].apply(lambda x: np.dot(np.array(query_vect.reshape(512),dtype=float), np.array(parse_embedding_array(x).reshape(512),dtype=float)))
+      most_similar_articles = data.sort_values(by='similarity', ascending=False).drop_duplicates(subset='image_name')[1:top_K+1]
 
-    """
-    Sort Cosine Similarity Column in Descending Order
-    Here we start at 1 to remove similarity with itself because it is always 1
-    """
-    most_similar_articles = data.sort_values(by='cos_sim', ascending=False).drop_duplicates(subset='image_name')[1:top_K+1]
-
+    print(data.sort_values(by='similarity', ascending=False)["similarity"].values)
     return most_similar_articles[revevant_cols].reset_index()

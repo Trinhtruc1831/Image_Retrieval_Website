@@ -19,7 +19,7 @@ def index(request):
        
         if(Is_query_text and not(Is_query_img)):
             query_text = request.POST['textSearch']
-            rs = get_top_N_images(query_text, top_K=10, search_criterion="text")
+            rs = get_top_N_images(query_text, top_K=100, search_criterion="text")
             rs_list = rs.image_name.values
 
         if(Is_query_img and not(Is_query_text)):
